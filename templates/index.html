@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaria Treatment Predictor</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-text-color);
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 5px 0;
+            color: var(--secondary-text-color);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: var(--result-bg-color);
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+
+            h1 {
+                color: #fff;
+            }
+
+            .form-section {
+                background-color: #2c2c2c;
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+            label {
+                color: #bbb;
+            }
+
+            input[type="number"], select {
+                background-color: #333;
+                color: #fff;
+                border: 1px solid #555;
+            }
+
+            button {
+                background-color: #1a8f1a;
+            }
+
+            button:hover {
+                background-color: #218d21;
+            }
+
+            #result {
+                background-color: #333;
+                border-color: #444;
+                color: #fff;
+            }
+        }
+
+        /* Light Mode */
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: #f4f4f9;
+                color: #333;
+            }
+
+            h1 {
+                color: #333;
+            }
+
+            .form-section {
+                background-color: #fff;
+                padding: 15px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            label {
+                color: #444;
+            }
+
+            input[type="number"], select {
+                background-color: #fff;
+                color: #333;
+                border: 1px solid #ccc;
+            }
+
+            button {
+                background-color: #4CAF50;
+            }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+            #result {
+                background-color: #fff;
+                border-color: #ddd;
+                color: #333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Malaria Treatment Predictor</h1>
+    <form id="malariaForm">
+        <div class="form-section">
+            <h3>Symptoms</h3>
+            <label><input type="checkbox" name="fever"> Fever</label>
+            <label><input type="checkbox" name="chills"> Chills</label>
+            <label><input type="checkbox" name="sweats"> Sweats</label>
+            <label><input type="checkbox" name="headache"> Headache</label>
+            <label><input type="checkbox" name="nausea"> Nausea</label>
+            <label><input type="checkbox" name="vomiting"> Vomiting</label>
+            <label><input type="checkbox" name="body_aches"> Body Aches</label>
+            <label><input type="checkbox" name="impaired_consciousness"> Impaired Consciousness</label>
+            <label><input type="checkbox" name="prostration"> Prostration</label>
+            <label><input type="checkbox" name="convulsions"> Convulsions</label>
+            <label><input type="checkbox" name="deep_breathing"> Deep Breathing</label>
+            <label><input type="checkbox" name="respiratory_distress"> Respiratory Distress</label>
+            <label><input type="checkbox" name="abnormal_bleeding"> Abnormal Bleeding</label>
+            <label><input type="checkbox" name="jaundice"> Jaundice</label>
+            <label><input type="checkbox" name="severe_anemia"> Severe Anemia</label>
+        </div>
+        <div class="form-section">
+            <h3>Patient Details</h3>
+            <label>Age: <input type="number" name="age" min="1" max="120" required></label>
+            <label>Weight (kg): <input type="number" name="weight" min="5" max="200" required></label>
+            <label>Region: 
+                <select name="region" required>
+                    <option value="Sub-Saharan Africa">Sub-Saharan Africa</option>
+                    <option value="Papua New Guinea">Papua New Guinea</option>
+                    <option value="Southeast Asia">Southeast Asia</option>
+                    <option value="Central America west of Panama">Central America west of Panama</option>
+                    <option value="Haiti">Haiti</option>
+                    <option value="Dominican Republic">Dominican Republic</option>
+                </select>
+            </label>
+            <label>Gender: 
+                <select name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </label>
+            <label><input type="checkbox" name="pregnant"> Pregnant</label>
+            <label><input type="checkbox" name="g6pd_deficiency"> G6PD Deficiency</label>
+            <label><input type="checkbox" name="previous_medications"> Previous Medications</label>
+        </div>
+        <button type="submit">Predict Treatment</button>
+    </form>
+    <div id="result">
+        <h3>Prediction Result</h3>
+        <p id="drug"></p>
+        <p id="tablets"></p>
+        <p id="dosage"></p>
+    </div>
+
+    <script>
+        document.getElementById("malariaForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                fever: document.querySelector("input[name='fever']").checked ? 1 : 0,
+                chills: document.querySelector("input[name='chills']").checked ? 1 : 0,
+                sweats: document.querySelector("input[name='sweats']").checked ? 1 : 0,
+                headache: document.querySelector("input[name='headache']").checked ? 1 : 0,
+                nausea: document.querySelector("input[name='nausea']").checked ? 1 : 0,
+                vomiting: document.querySelector("input[name='vomiting']").checked ? 1 : 0,
+                body_aches: document.querySelector("input[name='body_aches']").checked ? 1 : 0,
+                impaired_consciousness: document.querySelector("input[name='impaired_consciousness']").checked ? 1 : 0,
+                prostration: document.querySelector("input[name='prostration']").checked ? 1 : 0,
+                convulsions: document.querySelector("input[name='convulsions']").checked ? 1 : 0,
+                deep_breathing: document.querySelector("input[name='deep_breathing']").checked ? 1 : 0,
+                respiratory_distress: document.querySelector("input[name='respiratory_distress']").checked ? 1 : 0,
+                abnormal_bleeding: document.querySelector("input[name='abnormal_bleeding']").checked ? 1 : 0,
+                jaundice: document.querySelector("input[name='jaundice']").checked ? 1 : 0,
+                severe_anemia: document.querySelector("input[name='severe_anemia']").checked ? 1 : 0,
+                age: parseInt(document.querySelector("input[name='age']").value),
+                weight: parseInt(document.querySelector("input[name='weight']").value),
+                region: document.querySelector("select[name='region']").value,
+                gender: document.querySelector("select[name='gender']").value,
+                pregnant: document.querySelector("input[name='pregnant']").checked ? 1 : 0,
+                g6pd_deficiency: document.querySelector("input[name='g6pd_deficiency']").checked ? 1 : 0,
+                previous_medications: document.querySelector("input[name='previous_medications']").checked ? 1 : 0
+            };
+
+            // Send POST request to API
+            fetch("http://localhost:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Error: " + data.error);
+                } else {
+                    document.getElementById("drug").textContent = "Recommended Drug: " + data.recommended_drug;
+                    document.getElementById("tablets").textContent = "Tablets Per Day: " + data.tablets_per_day;
+                    document.getElementById("dosage").textContent = "Dosage: " + data.dosage;
+                    document.getElementById("result").style.display = "block";
+                }
+            })
+            .catch(error => {
+                alert("Error: " + error.message);
+            });
+        });
+    </script>
+</body>
+</html>
